@@ -1,43 +1,31 @@
-import facebook
-import requests
+from FacebookScraper import FacebookScraper
+from facebook_scraper import get_posts
 
-# Prompt the user to enter their Facebook credentials, Facebook group name, and a list of words to monitor for in the Facebook group
+### Facebook user: Boris Red
 email = "monepoy122@gam1fy.com"
 password = "6pNYqJk3YcJDAXz"
-user_access_token = "EAARLtz0aLMQBAONvUfxqg5G5kkYM44UBRNtpRBkrJCLwpAOegqbQwqRFGA9V8wDuAGZANIkVhnGCrSDpa2tSXp5FywBy5jqLekOt2rbFUW1FEZAzdZC2gZCw4dz5aUEOX9Q49Kxb3ZC5ZBGnZCZAZA09hKmmqHHtlYU60LYIIK5O8ZCeKvKK6BbaMZC2gEWwWMBOD4Xgty5e8O9ozgpCWnVNJz0dg11KmPb6Vi6Co68G9fBohH9ro5taZCF1j2mva5HjEaUZD"
-group_id = "184920528370332" # input("Enter the name of the Facebook group to monitor: ")
-words_to_monitor = "hey,hi,2" # input("Enter a comma-separated list of words to monitor: ").split(',')
+group_id = "184920528370332"
 
-# Log in to Facebook using the user's credentials
-session = requests.Session()
-session.verify = True
-session.auth = (email, password)
 
-# Retrieve the ID of the Facebook group based on its name
-graph = facebook.GraphAPI(access_token=user_access_token, version="3.0")
-import pdb; pdb.set_trace()
-groups = graph.get_object('me/groups')
-found_group = False
-for group in groups['data']:
-    if group['id'] == group_id:
-        group_id = group['id']
-        found_group = True
-        break
-if not found_group:
-    print("Could not find Facebook group with id: " + group_id)
-    exit()
+def run():
+    # older_posts = get_posts('184920528370332', pages=1, timeout=30, credentials=(email, password), encoding='utf-8')
+    # with open('posts.txt', 'w', encoding="utf-8") as f:
+    #     for p in older_posts:
+    #         f.write(p['text'])
+    #         f.write('\n\n')
 
-# Fetch the posts in the Facebook group
-posts = graph.get_connections(group_id, "feed")
+    # facebook_scraper = FacebookScraper(email, password, [group_id])
+    # with FacebookScraper(email, password, [group_id]) as fs:
+    #     older_posts = fs.get_older_posts()
+    #     with open('posts.txt', 'w', encoding="utf-8") as f:
+    #         for p in older_posts:
+    #             f.write(p.text)
+    #             f.write('\n\n')        
+        # new_post = facebook_scraper.run()
+        # parsed_post = PostManager.parse(new_post)
+        # if PostManager.filter(parsed_post):
+        #     telegram_bot.send(parsed_post)
 
-# Loop through the posts and check if any of them contain any of the words in the user's list of words to monitor
-for post in posts['data']:
-    if 'message' in post:
-        message = post['message']
-        for word in words_to_monitor:
-            if word in message:
-                print("Found post containing monitored word: " + word)
-                print("Post details:")
-                print("Message: " + message)
-                print("Link: " + post['link'])
-                break
+
+if __name__ == '__main__':
+    run()
